@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: soundgood-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: soundgood-db
+    ports:
+      - '5432:5432'
+
+  pgadmin:
+    container_name: soundgood-pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_USER: admin
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 123
+    ports:
+      - '5050:80'
