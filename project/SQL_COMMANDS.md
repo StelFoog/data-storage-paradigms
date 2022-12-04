@@ -85,7 +85,13 @@ whatever year the user wants data for.
 
 ### Explanation
 
-TODO
+COALESCE means if there are no lessons of a type in a month, then it will be displayed as `0`
+instead of `NULL`. Every type of lesson has it's own table, so we need to count number of lessons
+on each table and then do a `FULL OUTER JOIN` between them. Since we only keep track of time using
+our bookings table we do an `INNER JOIN` with booking and the lesson type table thats been
+`RIGHT JOIN`ed with the generic lesson. On our `INNER JOIN`s and `RIGHT JOIN`s we join based on
+lesson id which is unique. On our `FULL OUTER JOIN`s we used the months of the year to connect the
+different queries to each other.
 
 ## Get amount of students with zero siblings
 
@@ -114,7 +120,10 @@ schema we used for our database made this a requirement.
 
 ### Explanation
 
-TODO
+We decided early on to determine siblings by a shared parent. Since not all students have a parent
+assigned we need to combine those who have a parent with no other students in the system with those
+who have no parent in the system. When counting how many students share a parent, we need to
+subtract `1` since it also counts itself.
 
 ## Get amount of students with X siblings (x > `2`)
 
@@ -144,7 +153,11 @@ schema we used for our database made this a requirement.
 
 ### Explanation
 
-TODO
+We group by `parent_contact` on the `student` table and count how many children each parent has
+(subtracted by 1, since we want the `WHERE num_siblings = ...` clause to be explicity based on user
+input). If we want to find how many students have 2 siblings, we need to find all students whose
+parent has 3 children. Finally we count all students who has a parent who is part of the selected
+list.
 
 ## Get lessons given by instructors for a given month (next month)
 
@@ -172,7 +185,12 @@ for.
 
 ### Explanation
 
-TODO
+The instructor which teaches a lesson is defined in the `lesson` table and the time of the lesson is
+defined in the `booking` table, so we need to do an `INNER JOIN` to combine the two. In the `FROM`
+clause, we find the `booked_lessons` which are the unique lessons booked within the specied month.
+Since there will be several bookings for the same timeslot by multiple students when it's a group-
+or ensemble-lesson. Then we filter based on the user-given required lessons to appear in the list
+and sort in descending order.
 
 ## Get ensemble lessons for a given week (current week)
 
@@ -209,4 +227,9 @@ year and week the user wants data for.
 
 ### Explanation
 
-TODO
+`DY` is the shorthand name for a weekday (`MON`, `TUE`, etc). To display the available seats for a
+lesson we used `CASE` with specified cases, 0 seats -> `'None'`, 1-2 -> `'FEW'` otherwise (i.e. more
+than 2 seats) `'MANY'`. We use the `booking` table to count all available lessons for the given week
+and match it with the `ensemble_lesson` table. So we do a `INNER JOIN` on the tables based on the
+lesson ids. Then we do a `GROUP BY` to find the unique ensemble lessons and filter based on the week
+using `HAVING` to filter on the given week.
