@@ -3,6 +3,11 @@
 This document contains the SQL commands we have created to perform the queries specified in the
 project requirements.
 
+Commands can be automatically generated (i.e. user provided arguments inserted) and used on the
+database using the `Makefile` arguments provided explicitly (e.g. `year=2021`). The queries are
+generated using javascript which was used since it allowed for easy parsing, validation and
+string-insertion. Node is required for the scripts to run.
+
 ## Get total lessons per month in a year
 
 ```SQL
