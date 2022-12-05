@@ -97,7 +97,7 @@ different queries to each other.
 
 ```SQL
 SELECT (
-	SELECT COUNT(*)
+	SELECT COUNT(*) AS num_with_2_siblings
 	FROM (
 		SELECT COUNT(student.parent_contact) - 1 as num_siblings
 		FROM student
@@ -105,13 +105,11 @@ SELECT (
 		GROUP BY student.parent_contact
 	) as sibing_count
 	WHERE num_siblings = 0
-)
-+
-(
+) + (
 	SELECT COUNT(*)
 	FROM student
 	WHERE student.parent_contact IS null
-) as num_with_zero_siblings
+) as num_with_no_siblings
 ;
 ```
 
@@ -125,7 +123,7 @@ assigned we need to combine those who have a parent with no other students in th
 who have no parent in the system. When counting how many students share a parent, we need to
 subtract `1` since it also counts itself.
 
-## Get amount of students with X siblings (x > `2`)
+## Get amount of students with X siblings (x > `0`)
 
 ```SQL
 SELECT COUNT(*)
