@@ -15,6 +15,6 @@ yearly-totals:
 student-siblings:
 	node scripts/getStudentsWithSiblings.js $(siblings) | docker exec -i soundgood-db psql -U postgres -d soundgood-db
 instructor-lessons:
-	node scripts/getInstructorLessons.js $(year)-$(month) | docker exec -i soundgood-db psql -U postgres -d soundgood-db
+	node scripts/getInstructorLessons.js $(year)-$(month) $(minLessons) | docker exec -i soundgood-db psql -U postgres -d soundgood-db
 weekly-ensembles:
 	node scripts/getWeeklyEnsembles.js $(year)-$(week) | docker exec -i soundgood-db psql -U postgres -d soundgood-db
